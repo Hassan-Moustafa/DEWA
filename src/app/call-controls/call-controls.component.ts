@@ -1,4 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { FirebaseService } from '../services/firebase.service';
+import { ICallInfo } from '../interfaces/call-info.interface';
+import { CallType, CallStatus } from '../enums/enums';
 
 @Component({
   selector: 'app-call-controls',
@@ -15,7 +18,13 @@ export class CallControlsComponent implements OnInit {
   @Output() closeCall = new EventEmitter<void>();
 
   
-  constructor() { }
+  constructor(private firebaseService: FirebaseService) {
+    this.firebaseService.getCallStatus().subscribe((callInfo: ICallInfo) => {
+      if(callInfo.status === CallStatus.Calling && callInfo.type !== CallType.Video) {
+        this.videoWorkingStatus = false;
+      }
+    })
+   }
 
   ngOnInit() {
   }

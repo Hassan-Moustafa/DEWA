@@ -1,5 +1,9 @@
 import { Component, OnInit, SimpleChanges, Input, Output, EventEmitter } from '@angular/core';
 import OT from '@opentok/client';
+import {environment} from '../../environments/environment';
+import { FirebaseService } from '../services/firebase.service';
+import { ICallInfo } from '../interfaces/call-info.interface';
+import { CallStatus, CallType } from '../enums/enums';
 
 @Component({
   selector: 'app-video-stream',
@@ -8,34 +12,28 @@ import OT from '@opentok/client';
 })
 export class VideoStreamComponent {
 
-  apiKey = "46822744";
-  sessionId = "1_MX40NjgyMjc0NH5-MTU5Mzc0MDI1Nzk1MH5IRkVobzlHWUUyVzdNSWJ6QnZGYnJEZit-fg";
-  token = "T1==cGFydG5lcl9pZD00NjgyMjc0NCZzaWc9MTVhMDQ0NzFkMTE0NTE3ODM1OTlkNTM1YTQ0MWFlMDYxYWQyMGExMzpzZXNzaW9uX2lkPTFfTVg0ME5qZ3lNamMwTkg1LU1UVTVNemMwTURJMU56azFNSDVJUmtWb2J6bEhXVVV5VnpkTlNXSjZRblpHWW5KRVppdC1mZyZjcmVhdGVfdGltZT0xNTkzNzQwMzA1Jm5vbmNlPTAuNzk4NDY3MzU5MDU2NzAyJnJvbGU9cHVibGlzaGVyJmV4cGlyZV90aW1lPTE1OTYzMzIzMDMmaW5pdGlhbF9sYXlvdXRfY2xhc3NfbGlzdD0=";
 
   session;
   subscriber;
   publisher;
 
-  isVoiceWorking = true;
-  isVideoWorking = true;
   callIsWorking = false;
+  currentCallInfo: ICallInfo;
+  isSecondPartyPublishedVoiceOnly = false;
 
-  @Input() callStatus: boolean = false;
-  @Output() callClosed = new EventEmitter<void>();
-
-
-  constructor() { }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if(changes.callStatus && changes.callStatus.currentValue) {
-      if(!this.callIsWorking) {
-        this.callIsWorking = true;
-        setTimeout(() => {
-          this.initializeSession();
-        }, 0);
+  constructor(private firebaseService: FirebaseService) {
+    this.firebaseService.getCallStatus().subscribe((callInfo: ICallInfo) => {
+      if(callInfo.status === CallStatus.Calling) {
+        if(!this.callIsWorking) {
+          this.callIsWorking = true;
+          this.currentCallInfo = callInfo;
+          setTimeout(() => {
+            this.initializeSession();
+          }, 0);
+        }
       }
-    }
-  }
+    })
+   }
 
   handleError(error) {
     if (error) {
@@ -43,13 +41,14 @@ export class VideoStreamComponent {
     }
   }
 
-  handlePropertChange(event) {
-    let subscribers = this.session.getSubscribersForStream(event.stream);
+  handlePropertChange(event, thisPtr) {
+    let subscribers = thisPtr.session.getSubscribersForStream(event.stream);
     if(event.changedProperty === 'hasVideo' && event.newValue !== event.oldValue && subscribers.length > 0) {
+      console.log(event.newValue);
         if(event.newValue) {
-          // this.voiceCallContainer.style.display = 'none';
+          thisPtr.isSecondPartyPublishedVoiceOnly = false;
         } else {
-          // this.voiceCallContainer.style.display = 'block';
+          thisPtr.isSecondPartyPublishedVoiceOnly = true;
         }
     }
   }
@@ -62,7 +61,6 @@ export class VideoStreamComponent {
     this.publisher.publishAudio(status);
   }
 
-
   onVideoStatusChange(videoStatus: boolean) {
     this.publichVideoStatus(videoStatus);
   }
@@ -74,14 +72,16 @@ export class VideoStreamComponent {
   onCloseCall() {
     this.session.disconnect();
     this.callIsWorking = false;
-    this.callClosed.emit();
+    this.firebaseService.setCallStatus({
+      status: CallStatus.Idle,
+      type: CallType.Video
+    });
   }
 
-  
   initializeSession() {
 
     if(!this.session) {
-        this.session = OT.initSession(this.apiKey, this.sessionId);
+        this.session = OT.initSession(environment.apiKey, environment.sessionId);
         this.session.on('streamCreated', (event) => {
             console.log('subscribe');
             this.subscriber = this.session.subscribe(event.stream, 'subscriber', {
@@ -93,7 +93,7 @@ export class VideoStreamComponent {
     }
     // Subscribe to a newly created stream
 
-    this.session.on('streamPropertyChanged', this.handlePropertChange);
+    this.session.on('streamPropertyChanged', (e) => this.handlePropertChange(e, this));
 
     // Create a publisher
     this.publisher = OT.initPublisher('publisher', {
@@ -102,8 +102,12 @@ export class VideoStreamComponent {
         height: '100%'
     }, this.handleError);
 
+    if(this.currentCallInfo && this.currentCallInfo.type !== CallType.Video) {
+      this.publichVideoStatus(false);
+    }
+
     // Connect to the session
-    this.session.connect(this.token, (error) => {
+    this.session.connect(environment.token, (error) => {
         // If the connection is successful, publish to the session
         if (error) {
           this.handleError(error);
@@ -111,6 +115,6 @@ export class VideoStreamComponent {
           this.session.publish(this.publisher, this.handleError);
         }
     });
-}
+  }
 
 }

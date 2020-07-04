@@ -1,0 +1,25 @@
+<div class="row mx-0">
+    <div class="col-12">
+        <h4 class="title">
+            {{title}}
+        </h4>
+    </div>
+    <div class="row col-12 px-0 mx-0 mt-3 justify-content-between">
+        <div class="col-auto" *ngIf="isIncomingCall">
+            <button
+                class="answer-call-btn" 
+                (click)="answerCall()"
+            >
+                Answer
+            </button>
+        </div>
+        <div class="col-auto">
+            <button 
+            class="reject-call-btn" 
+            (click)="rejectCall()"
+            >
+                Reject
+        </button>
+        </div>
+    </div>
+</div>

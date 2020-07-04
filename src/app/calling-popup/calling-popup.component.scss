@@ -1,0 +1,31 @@
+.answer-call-btn {
+    border: 0;
+    background: #49a66c;
+    color: white;
+    border-radius: 20px;
+    padding: 8px 27px;
+    font-size: 14px;
+    &:hover {
+        background: #219e51;
+    }
+}
+
+.reject-call-btn {
+    border: 0;
+    background: rgba(255, 0, 0, 0.712);
+    color: white;
+    border-radius: 20px;
+    padding: 8px 27px;
+    font-size: 14px;
+    &:hover {
+        background: red;
+    }
+}
+
+.title {
+    text-align: center;
+}
+
+button:focus{
+    outline: none;
+}
