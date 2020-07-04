@@ -5,12 +5,14 @@
     border-radius: 20px;
     padding: 8px 27px;
     font-size: 14px;
+    width: 100%;
     &:hover {
         background: #219e51;
     }
 }
 
 .reject-call-btn {
+    width: 100%;
     border: 0;
     background: rgba(255, 0, 0, 0.712);
     color: white;

@@ -5,7 +5,7 @@
         </h4>
     </div>
     <div class="row col-12 px-0 mx-0 mt-3 justify-content-between">
-        <div class="col-auto" *ngIf="isIncomingCall">
+        <div class="col-12 my-2 my-sm-0 col-sm-auto" *ngIf="isIncomingCall">
             <button
                 class="answer-call-btn" 
                 (click)="answerCall()"
@@ -13,7 +13,7 @@
                 Answer
             </button>
         </div>
-        <div class="col-auto">
+        <div class="col-12 col-sm-auto">
             <button 
             class="reject-call-btn" 
             (click)="rejectCall()"

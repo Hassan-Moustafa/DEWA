@@ -13,9 +13,11 @@ import { ICallInfo } from './interfaces/call-info.interface';
 export class AppComponent {
   
   dialogRef;
+  callInfo: ICallInfo;
 
   constructor(private firebaseService: FirebaseService, public dialog: MatDialog) {
     this.firebaseService.registerCallListener().subscribe((callInfo: ICallInfo) => {
+      this.callInfo = callInfo;
       if(callInfo.status === CallStatus.Calling) {
         this.handleIncomingCall(callInfo);
       } else if (callInfo.status === CallStatus.Idle) {
@@ -26,7 +28,7 @@ export class AppComponent {
   
   startCall() {
     this.dialogRef = this.dialog.open(CallingPopupComponent, {
-      width: '40%',
+      width: '355px',
       data: {
         title: 'Calling robot',
         isIncomingCall: false,
@@ -51,7 +53,7 @@ export class AppComponent {
 
   handleIncomingCall(callInfo: ICallInfo) {
      this.dialogRef = this.dialog.open(CallingPopupComponent, {
-      width: '40%',
+      width: '355px',
       data: {
         title: 'Incoming call from robot',
         isIncomingCall: true,
