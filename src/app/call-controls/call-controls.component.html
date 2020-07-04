@@ -1,0 +1,23 @@
+
+<div class="row mx-0 justify-content-center video-controls">
+    <div class="row col-auto">
+        <div class="col-auto">
+            <i [ngClass]="{
+                'fas': true,
+                'fa-video': videoWorkingStatus,
+                'fa-video-slash' : !videoWorkingStatus 
+            }"
+            (click)="toggleVideoStatus()"></i>
+        </div>
+        <div class="col-auto">
+            <i [ngClass]="{
+                'fas': true,
+                'fa-microphone': voiceWorkingStatus,
+                'fa-microphone-slash': !voiceWorkingStatus 
+            }" (click) = "toggleVoiceStatus()"></i>
+        </div>
+        <div class="col-auto">
+            <i class="fas fa-phone" (click)="onCloseCall()"></i>
+        </div>
+    </div>
+</div>

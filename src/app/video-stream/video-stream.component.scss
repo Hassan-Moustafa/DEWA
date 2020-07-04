@@ -1,0 +1,15 @@
+#subscriber {
+    background-color: rgb(187, 182, 182);
+    height: 400px;
+    z-index: 10;
+}
+
+#publisher {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    top: 0px;
+    right: 0px;
+    z-index: 100;
+    border-radius: 3px;
+}

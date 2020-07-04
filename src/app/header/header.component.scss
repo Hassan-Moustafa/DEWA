@@ -1,0 +1,49 @@
+.header {
+    height: 80px;
+    background-color: #f7f7f7;
+}
+
+.dewa-logo {
+    width: 200px;
+}
+
+.receive-calls-btn {
+    border: 0;
+    background: #49a66c;
+    color: white;
+    border-radius: 20px;
+    padding: 8px 27px;
+}
+
+.receive-calls-btn:hover {
+    background: #219e51;
+}
+
+button:focus{
+    outline: none;
+}
+
+.title{
+    color: #343440;
+    font-weight: 500;
+}
+
+@media only screen and (max-width: 575px) {
+    .header {
+        height: 170px !important;
+    }
+
+    .receive-calls-btn {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .title {
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    .dewa-logo {
+        margin: 10px 0;
+    }
+}

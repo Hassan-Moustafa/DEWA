@@ -1,0 +1,46 @@
+
+.video-controls{
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    z-index: 100;
+}
+
+.voice-controls {
+    position: absolute;
+    width: 100%;
+    bottom: 112px;
+}
+
+.fa-user {
+    font-size: 30px;
+    color: #d6d6d6;
+}
+
+.fa-phone {
+    transform: rotate(224deg);
+    padding: 10px;
+    border-radius: 20px;
+    background-color: rgba(255, 0, 0, 0.712);
+    color: white;
+    cursor: pointer;
+}
+
+.fa-phone:hover {
+    background-color: red;
+}
+
+.fa-microphone, .fa-microphone-slash, .fa-video-slash, .fa-video {
+    border: 1px solid rgb(233, 233, 233);
+    padding: 10px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.fa-microphone:hover, .fa-microphone-slash:hover, .fa-video-slash:hover, .fa-video:hover{
+    background-color: rgb(238, 238, 238);
+}
+
+.fa-video-slash, .fa-video {
+    padding: 10px 8px;
+}
