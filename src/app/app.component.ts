@@ -49,6 +49,10 @@ export class AppComponent {
     });
 
     // this.callStatus = true;
+    // this.firebaseService.setCallStatus({
+    //   status: CallStatus.Calling,
+    //   type: CallType.Video
+    // })
   }
 
   onCallClose() {
