@@ -5,5 +5,5 @@ export enum CallStatus {
   
 export enum CallType {
     Video = "video",
-    Voice = "voice"
+    Voice = "audio"
 }

@@ -27,6 +27,7 @@ export class VideoStreamComponent {
         if(!this.callIsWorking) {
           this.callIsWorking = true;
           this.currentCallInfo = callInfo;
+          console.log(this.currentCallInfo);
           setTimeout(() => {
             this.initializeSession();
           }, 0);

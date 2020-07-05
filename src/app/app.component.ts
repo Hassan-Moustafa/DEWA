@@ -17,13 +17,20 @@ export class AppComponent {
 
   constructor(private firebaseService: FirebaseService, public dialog: MatDialog) {
     this.firebaseService.registerCallListener().subscribe((callInfo: ICallInfo) => {
-      this.callInfo = callInfo;
-      if(callInfo.status === CallStatus.Calling) {
+      if(callInfo.status === CallStatus.Calling && (!this.callInfo || (this.callInfo && this.callInfo.status == CallStatus.Idle))) {
+        this.callInfo = callInfo;
         this.handleIncomingCall(callInfo);
       } else if (callInfo.status === CallStatus.Idle) {
+        this.callInfo = null;
         this.rejectCallHandler(this);
       }
     });
+
+    this.firebaseService.getCallStatus().subscribe((callInfo: ICallInfo) => {
+      this.callInfo = callInfo;
+    })
+
+
   }
   
   startCall() {
