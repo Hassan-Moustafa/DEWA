@@ -66,7 +66,7 @@ export class AppComponent {
      this.dialogRef = this.dialog.open(CallingPopupComponent, {
       width: '355px',
       data: {
-        title: 'Incoming call from robot',
+        title: `Incoming ${callInfo.type === CallType.Video ? 'video' : 'voice'} call from robot`,
         isIncomingCall: true,
         answerCallHandler: () => this.answerCallHandler(this, callInfo),
         rejectCallHandler: () => this.rejectCallHandler(this)
