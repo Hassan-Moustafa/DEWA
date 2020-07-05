@@ -17,8 +17,8 @@ export class AppComponent {
 
   constructor(private firebaseService: FirebaseService, public dialog: MatDialog) {
     this.firebaseService.registerCallListener().subscribe((callInfo: ICallInfo) => {
-      if(callInfo.status === CallStatus.Calling && (!this.callInfo || (this.callInfo && this.callInfo.status == CallStatus.Idle))) {
-        this.callInfo = callInfo;
+      console.log(callInfo)
+      if((callInfo.status === CallStatus.CallingAudio || callInfo.status === CallStatus.CallingVideo) && (!this.callInfo || (this.callInfo && this.callInfo.status === CallStatus.Idle))) {
         this.handleIncomingCall(callInfo);
       } else if (callInfo.status === CallStatus.Idle) {
         this.callInfo = null;
@@ -26,11 +26,9 @@ export class AppComponent {
       }
     });
 
-    this.firebaseService.getCallStatus().subscribe((callInfo: ICallInfo) => {
-      this.callInfo = callInfo;
-    })
-
-
+    // this.firebaseService.getCallStatus().subscribe((callInfo: ICallInfo) => {
+    //   this.callInfo = callInfo;
+    // })
   }
   
   startCall() {
@@ -63,10 +61,11 @@ export class AppComponent {
   }
 
   handleIncomingCall(callInfo: ICallInfo) {
-     this.dialogRef = this.dialog.open(CallingPopupComponent, {
+    this.callInfo = callInfo;
+    this.dialogRef = this.dialog.open(CallingPopupComponent, {
       width: '355px',
       data: {
-        title: `Incoming ${callInfo.type === CallType.Video ? 'video' : 'voice'} call from robot`,
+        title: `Incoming ${callInfo.status === CallStatus.CallingVideo ? 'video' : 'voice'} call from robot`,
         isIncomingCall: true,
         answerCallHandler: () => this.answerCallHandler(this, callInfo),
         rejectCallHandler: () => this.rejectCallHandler(this)
@@ -90,8 +89,7 @@ export class AppComponent {
       thisPtr.dialogRef.close();
     }
     thisPtr.firebaseService.setCallStatus({
-      status: CallStatus.Idle,
-      type: CallType.Video
+      status: CallStatus.Idle
     });
   }
 }

@@ -1,5 +1,7 @@
 export enum CallStatus {
     Calling = "calling",
+    CallingAudio = "calling_audio",
+    CallingVideo = "calling_video",
     Idle = "idle"
 }
   

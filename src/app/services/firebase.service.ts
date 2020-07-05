@@ -10,10 +10,7 @@ import { CallStatus, CallType } from '../enums/enums';
 })
 export class FirebaseService {
 
-  private callStatus = new BehaviorSubject<ICallInfo>({
-    status: CallStatus.Idle,
-    type: CallType.Video
-  });
+  private callStatus = new BehaviorSubject<ICallInfo>(null);
 
   constructor(private db: AngularFireDatabase) { }
 
@@ -29,7 +26,7 @@ export class FirebaseService {
   }
   
   registerCallListener () {
-    return this.db.object('calls').valueChanges().pipe(
+    return this.db.object('calls_v2').valueChanges().pipe(
       map((callInfo: ICallInfo) => callInfo)
     );
   }
@@ -43,7 +40,7 @@ export class FirebaseService {
   }
   
   rejectCall() {
-    this.db.object('/calls/').update({status: 'idle'});
+    this.db.object('/calls_v2/').update({status: 'idle'});
   }
 }
 

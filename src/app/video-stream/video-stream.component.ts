@@ -23,11 +23,13 @@ export class VideoStreamComponent {
 
   constructor(private firebaseService: FirebaseService) {
     this.firebaseService.getCallStatus().subscribe((callInfo: ICallInfo) => {
-      if(callInfo.status === CallStatus.Calling) {
+      console.log(callInfo);
+      if(callInfo && (callInfo.status === CallStatus.CallingAudio || callInfo.status === CallStatus.CallingVideo)) {
         if(!this.callIsWorking) {
+          this.isSecondPartyPublishedVoiceOnly = (callInfo.status === CallStatus.CallingAudio);
           this.callIsWorking = true;
           this.currentCallInfo = callInfo;
-          console.log(this.currentCallInfo);
+
           setTimeout(() => {
             this.initializeSession();
           }, 0);
@@ -74,8 +76,7 @@ export class VideoStreamComponent {
     this.session.disconnect();
     this.callIsWorking = false;
     this.firebaseService.setCallStatus({
-      status: CallStatus.Idle,
-      type: CallType.Video
+      status: CallStatus.Idle
     });
   }
 
@@ -103,7 +104,7 @@ export class VideoStreamComponent {
         height: '100%'
     }, this.handleError);
 
-    if(this.currentCallInfo && this.currentCallInfo.type !== CallType.Video) {
+    if(this.isSecondPartyPublishedVoiceOnly) {
       this.publichVideoStatus(false);
     }
 

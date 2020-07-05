@@ -20,7 +20,7 @@ export class CallControlsComponent implements OnInit {
   
   constructor(private firebaseService: FirebaseService) {
     this.firebaseService.getCallStatus().subscribe((callInfo: ICallInfo) => {
-      if(callInfo.status === CallStatus.Calling && callInfo.type !== CallType.Video) {
+      if(callInfo.status === CallStatus.CallingAudio) {
         this.videoWorkingStatus = false;
       }
     })
